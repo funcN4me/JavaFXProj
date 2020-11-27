@@ -1,14 +1,9 @@
 package sample;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Date;
 
 
 public class ParsingData {
@@ -31,11 +26,13 @@ public class ParsingData {
         return dtf.format(now);
     }
 
+    // Overloaded method for returning human-readable format of date
     public static String getCurrentDate(String forWhat) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
+
     // Same as upper method, but with time
     public static String getCurrentTime() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -43,24 +40,13 @@ public class ParsingData {
         return dtf.format(now);
     }
 
+    // Counting time differences between current time and time of event
     public static long[] countDifference(String dateOfEvent, String startTimeOfEvent) {
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime localDateTimeOfEvent = LocalDateTime.parse(dateOfEvent + " " + startTimeOfEvent, dateTimeFormat);
         LocalDateTime localCurrentDateTime = LocalDateTime.parse(getCurrentDate() + " " + getCurrentTime(), dateTimeFormat);
         Duration duration = Duration.between(localDateTimeOfEvent, localCurrentDateTime);
         long[] differences = {duration.toDays(), duration.toHours(), Math.abs(duration.toMinutes())};
-        System.out.println(differences[2]);
         return differences;
-    }
-
-    public static void Smth() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime localDateTime = LocalDateTime.parse("2020-11-20 00:39:00", dateTimeFormatter);
-        LocalDateTime localDateTime1 = LocalDateTime.parse("2020-11-21 00:30:00", dateTimeFormatter);
-        Duration duration = Duration.between(localDateTime, localDateTime1);
-        System.out.println(duration.toDays());
-        System.out.println(duration.toHours());
-        System.out.println(duration.toMinutes());
-        System.out.println(localDateTime.getMinute());
     }
 }

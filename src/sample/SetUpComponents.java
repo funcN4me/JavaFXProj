@@ -68,7 +68,7 @@ public class SetUpComponents {
         clock.play();
     }
 
-    // Set up style for titled pane depending on the remaining time before the event start
+    // Setting up style for titled pane depending on the remaining time before the event start
     private static void setUpStyleForTitledPanel(TitledPane pane, String[] dateLabels, String[] startsAtLabels, int currentPosition) {
         long[] differences = ParsingData.countDifference(dateLabels[currentPosition], startsAtLabels[currentPosition]);
         if (differences[0] == 0) {

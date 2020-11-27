@@ -6,11 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
 
-/**
- * Simple Java program to connect to MySQL database running on localhost and
- * running SELECT and INSERT query to retrieve and add data.
- * @author Javin Paul
- */
+
 public class DBFuncs {
     public static String currentDate = ParsingData.getCurrentDate();
     // JDBC URL, username and password of MySQL server
@@ -37,7 +33,6 @@ public class DBFuncs {
                     "\" or (Date = \"" + currentDate + "\" and StartsAt >= \"" + currentTime +"\") ORDER BY Date ASC, StartsAt ASC;");
             default -> query.append("select * from diary.activities");
         }
-//        System.out.println(query.toString());
         StringBuilder result = new StringBuilder();
         ResultSet rs = executeQueryWithConnection(query.toString());
         try {
@@ -69,13 +64,13 @@ public class DBFuncs {
 
     public static ResultSet executeQueryWithConnection(String query) {
         try {
-            // opening database connection to MySQL server
+            // Opening database connection to MySQL server
             con = DriverManager.getConnection(url, user, password);
 
-            // getting Statement object to execute query
+            // Getting Statement object to execute query
             stmt = con.createStatement();
 
-            // executing SELECT query
+            // Executing SELECT query
             rs = stmt.executeQuery(query);
 
         } catch (SQLException sqlEx) {

@@ -1,23 +1,11 @@
 package sample;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.ResourceBundle;
-
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Duration;
+
 
 public class Controller {
     private int hour, second, minute;
@@ -53,6 +41,7 @@ public class Controller {
         System.out.println("Privet");
     }
 
+    // Rebuilding accordion for events output
     @FXML
     void rebuildAccordion(ActionEvent event) {
         activitiesAccordion.getPanes().clear();
@@ -65,9 +54,7 @@ public class Controller {
             activitiesAccordion = SetUpComponents.setUpAccordion(activitiesAccordion, "Month");
         if (activitiesComboBox.getValue().toString().contains("upcoming"))
             activitiesAccordion = SetUpComponents.setUpAccordion(activitiesAccordion, "Upcoming");
-
         scrollPaneForAccordion.setContent(activitiesAccordion);
-
         }
 
 
@@ -76,12 +63,12 @@ public class Controller {
         assert phraseOfDayLabel != null : "fx:id=\"phraseOfDayLabel\" was not injected: check your FXML file 'pizdec.fxml'.";
         assert button1 != null : "fx:id=\"button1\" was not injected: check your FXML file 'pizdec.fxml'.";
         assert welcomeLabel != null : "fx:id=\"welcomeLabel\" was not injected: check your FXML file 'pizdec.fxml'.";
+
         phraseOfDayLabel.setText("Phrase of day: " + DBFuncs.getPhrase());
         activitiesComboBox.getItems().addAll("Your upcoming event", "Your events for today", "Your events for week", "Your events for month");
+
         SetUpComponents.setUpTimer(currentTimeLabel);
-        System.out.println("141414");
-        activitiesAccordion = SetUpComponents.setUpAccordion(activitiesAccordion, "Upcoming");
-//        ParsingData.Smth();
+        activitiesAccordion = SetUpComponents.setUpAccordion(activitiesAccordion, "Upcoming"); // Set up accordion for upcoming event
     }
 
 }
