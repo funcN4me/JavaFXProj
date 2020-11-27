@@ -16,7 +16,7 @@ public class DBFuncs {
     // JDBC URL, username and password of MySQL server
     private static final String url = "jdbc:mysql://127.0.0.1:3306/departmentHR?autoReconnect=true&useSSL=false";
     private static final String user = "root";
-    private static final String password = "****";
+    private static final String password = "JustWinners122";
 
     // JDBC variables for opening and managing connection
     private static Connection con;
@@ -28,8 +28,8 @@ public class DBFuncs {
         String currentTime = ParsingData.getCurrentTime();
         StringBuilder query = new StringBuilder();
         switch (spread) {
-            case "Upcoming" -> query.append("SELECT * FROM diary.activities WHERE Date =  ( SELECT MIN(Date) FROM diary.activities WHERE Date >= \"" + currentDate +
-                    "\" and StartsAt >= \"" + currentTime + "\" ORDER BY StartsAt ASC) LIMIT 1;");
+            case "Upcoming" -> query.append("SELECT * FROM diary.activities WHERE Date > \"" + currentDate +
+                    "\" or (Date = \"" + currentDate + "\" and StartsAt >= \"" + currentTime + "\") ORDER BY Date, StartsAt ASC LIMIT 1;");
             case "Today" -> query.append("select * from diary.activities where Date = \"" + currentDate + "\" and StartsAt >= \"" + currentTime + "\" ORDER BY Date ASC, StartsAt ASC;");
             case "Week" -> query.append("select * from diary.activities where Date > \"" + currentDate + "\" and Date <= \"" + ParsingData.countSmth(currentDate, "Week") +
                     "\" or (Date = \"" + currentDate + "\" and StartsAt >= \"" + currentTime +"\") ORDER BY Date ASC, StartsAt ASC;");
@@ -37,7 +37,7 @@ public class DBFuncs {
                     "\" or (Date = \"" + currentDate + "\" and StartsAt >= \"" + currentTime +"\") ORDER BY Date ASC, StartsAt ASC;");
             default -> query.append("select * from diary.activities");
         }
-        System.out.println(query.toString());
+//        System.out.println(query.toString());
         StringBuilder result = new StringBuilder();
         ResultSet rs = executeQueryWithConnection(query.toString());
         try {
