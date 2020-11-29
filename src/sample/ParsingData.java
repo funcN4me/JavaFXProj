@@ -49,4 +49,33 @@ public class ParsingData {
         long[] differences = {duration.toDays(), duration.toHours(), Math.abs(duration.toMinutes())};
         return differences;
     }
+
+    public static String convertDateFor(String date, String ForWhat) {
+        StringBuilder convertedDate = new StringBuilder();
+        switch (ForWhat) {
+            case "For User": {
+                String[] splittedDate = date.split("-");
+                convertedDate.append(splittedDate[2] + "." + splittedDate[1] + "." + splittedDate[0]);
+                break;
+            }
+            case "For DB": {
+                String[] splittedDate = date.split("\\.");
+                convertedDate.append(splittedDate[2] + "-" + splittedDate[1] + "-" + splittedDate[0]);
+                break;
+            }
+            default:
+                throw new NullPointerException("You should specify for what you are converting date");
+        }
+        return convertedDate.toString();
+    }
+
+    public static String parseTime(String[] number){
+        for (int i = 0; i < number.length; i++) {
+            if (number[i].length() == 1) {
+                number[i] = "0" + number[i];
+            }
+        }
+
+        return number[0] + ":" + number[1] + ":" + number[2] ;
+    }
 }

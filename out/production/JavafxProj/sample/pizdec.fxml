@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
@@ -19,9 +24,8 @@
         <tabs>
           <Tab text="Welcome">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="811.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#Goodbye" prefHeight="360.0" prefWidth="811.0">
                      <children>
-                        <Button fx:id="button1" layoutX="662.0" layoutY="101.0" mnemonicParsing="false" onAction="#Hello" prefHeight="33.0" prefWidth="123.0" text="Button" />
                         <Label fx:id="welcomeLabel" layoutX="215.0" text="Welcome to your diary, honey">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="26.0" />
@@ -46,6 +50,65 @@
                               </AnchorPane>
                           </content>
                         </ScrollPane>
+                        <DatePicker fx:id="datePicker" editable="false" layoutX="15.0" layoutY="121.0" onAction="#rebuildAccordionWithDatePicker" prefHeight="27.0" prefWidth="201.0" />
+                        <VBox fx:id="VBoxChanges" alignment="TOP_CENTER" layoutX="430.0" layoutY="160.0" prefHeight="298.0" prefWidth="197.0" spacing="15.0" style="-fx-border-color: #5c676e; -fx-border-width: 8px;">
+                           <children>
+                              <TextField fx:id="changeName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" promptText="Enter new name" />
+                              <DatePicker fx:id="changeDatePicker" onAction="#changeDate" promptText="Select new date" />
+                              <HBox prefHeight="47.0" prefWidth="197.0">
+                                 <children>
+                                    <TextField fx:id="changeHours" onScroll="#increaseHours" prefHeight="25.0" prefWidth="34.0">
+                                       <HBox.margin>
+                                          <Insets right="35.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="changeMinutes" onScroll="#increaseMinutes" prefHeight="25.0" prefWidth="34.0">
+                                       <HBox.margin>
+                                          <Insets right="35.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="changeSeconds" onScroll="#increaseSeconds" prefHeight="25.0" prefWidth="34.0">
+                                       <HBox.margin>
+                                          <Insets right="15.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets left="12.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="197.0">
+                                 <children>
+                                    <TextField fx:id="changeStartHours" onScroll="#increaseStartHours" prefHeight="25.0" prefWidth="45.0">
+                                       <HBox.margin>
+                                          <Insets left="35.0" right="35.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="changeStartMinutes" onScroll="#increaseStartMinutes" prefHeight="25.0" prefWidth="44.0">
+                                       <HBox.margin>
+                                          <Insets left="8.0" right="35.0" top="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets left="12.0" />
+                                 </padding>
+                              </HBox>
+                              <TextField fx:id="changePlace" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" promptText="Enter new place" />
+                              <HBox prefHeight="35.0" prefWidth="181.0">
+                                 <children>
+                                    <Button fx:id="confirmChangesBtn" mnemonicParsing="false" onAction="#confirmChanges" prefHeight="42.0" prefWidth="98.0" text="Confirm" visible="false" />
+                                    <Button fx:id="addEvent" mnemonicParsing="false" onAction="#addEventAction" prefHeight="32.0" prefWidth="87.0" text="Add event" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </VBox>
+                        <Slider fx:id="statusSlider" blockIncrement="1.0" disable="true" layoutX="459.0" layoutY="135.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" onMouseDragEntered="#Dada" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+                        <Label layoutX="433.0" layoutY="113.0" text="Edit event" />
+                        <Label layoutX="559.0" layoutY="113.0" text="Add new event" />
                      </children>
                   </AnchorPane>
             </content>

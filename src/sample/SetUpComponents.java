@@ -1,14 +1,24 @@
 package sample;
 
+import com.sun.javafx.geom.ConcentricShapePair;
+import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
+import javax.naming.ldap.Control;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 public class SetUpComponents {
 
@@ -27,7 +37,7 @@ public class SetUpComponents {
         else {
             TitledPane pane = new TitledPane();
             pane.setText("Nothing to do. Good job!");
-            pane.setStyle("-fx-border-color: #38ee00;");
+            pane.setStyle("-fx-border-color: #38ee00;"); // Set up green color
             pane.setExpanded(false);
             activitiesAccordion.getPanes().add(pane);
         }
@@ -38,18 +48,43 @@ public class SetUpComponents {
     // Setting up content to the titled panes
     private static TitledPane setUpTitledPanel(TitledPane pane, String spread, int currentPosition) {
         GridPane grid = new GridPane();
+
         grid.setVgap(10);
         grid.setPadding(new Insets(5, 5, 5, 5));
 
+        String[] nameLabels = DBFuncs.getInfoFor("Name", spread);
         String[] dateLabels = DBFuncs.getInfoFor("Date", spread);
         String[] startsAtLabels = DBFuncs.getInfoFor("StartsAt", spread);
         String[] durationLabels = DBFuncs.getInfoFor("Duration", spread);
         String[] placeLabels = DBFuncs.getInfoFor("Place", spread);
 
-        grid.add(new Label("Date of event: " + dateLabels[currentPosition]), 0,1);
-        grid.add(new Label("Event starting at: " + startsAtLabels[currentPosition]), 0, 2);
+        Button doneBtn = new Button("I've done with it!");
+        Button editEventBtn = new Button("Edit this event");
+
+        editEventBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Main.myControllerHandle.setVBoxStatus(true);
+                Main.myControllerHandle.updateChangeOutput(nameLabels[currentPosition], dateLabels[currentPosition], startsAtLabels[currentPosition], durationLabels[currentPosition], placeLabels[currentPosition]);
+                Main.myControllerHandle.oldData = new String[]{nameLabels[currentPosition], dateLabels[currentPosition], startsAtLabels[currentPosition], durationLabels[currentPosition], placeLabels[currentPosition]};
+//                Main.myControllerHandle.confirmChanges();
+            }
+        });
+
+        doneBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                pane.setStyle("-fx-border-color: #38ee00;");
+                DBFuncs.deleteEvent(dateLabels[currentPosition], startsAtLabels[currentPosition], durationLabels[currentPosition], placeLabels[currentPosition]);
+            }
+        });
+
+        grid.add(new Label("Date of event: " + ParsingData.convertDateFor(dateLabels[currentPosition], "For User")), 0,1);
+        grid.add(new Label("Event starts at: " + startsAtLabels[currentPosition]), 0, 2);
         grid.add(new Label("Duration of event: " + durationLabels[currentPosition]), 0,3);
         grid.add(new Label("Where it will be: " + placeLabels[currentPosition]), 0,4);
+        grid.add(doneBtn, 0, 5);
+        grid.add(editEventBtn, 0, 6);
 
         pane.setContent(grid);
         setUpStyleForTitledPanel(pane, dateLabels, startsAtLabels, currentPosition);
@@ -75,8 +110,9 @@ public class SetUpComponents {
             if (differences[1] == 0) {
                 if (differences[2] <= 60 && differences[2] > 30)
                     pane.setStyle("-fx-border-color: #e8b20e;"); // Set up yellow color
-                if (differences[2] <= 30)
+                if (differences[2] <= 30) {
                     pane.setStyle("-fx-border-color: #ff6b6b;"); // Set up red color
+                }
             }
             else
                 pane.setStyle("-fx-border-color: #5693f5;"); // Set up blue color
@@ -85,4 +121,14 @@ public class SetUpComponents {
             pane.setStyle("-fx-border-color: #5693f5;"); // Set up blue color
     }
 
+//    public static boolean setUpEditEventBtn() {
+//        boolean a;
+//        editEventBtn.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//            }
+//        });
+//
+//
+//    }
 }
