@@ -1,7 +1,5 @@
 package sample;
 
-import com.sun.javafx.geom.ConcentricShapePair;
-import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,11 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-
-import javax.naming.ldap.Control;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class SetUpComponents {
@@ -81,7 +75,8 @@ public class SetUpComponents {
 
         grid.add(new Label("Date of event: " + ParsingData.convertDateFor(dateLabels[currentPosition], "For User")), 0,1);
         grid.add(new Label("Event starts at: " + startsAtLabels[currentPosition]), 0, 2);
-        grid.add(new Label("Duration of event: " + durationLabels[currentPosition]), 0,3);
+        grid.add(new Label("Duration of event: " + Integer.parseInt(durationLabels[currentPosition]) / 60 + " hours " + Integer.parseInt(durationLabels[currentPosition]) % 60 + " minutes"),
+                0,3);
         grid.add(new Label("Where it will be: " + placeLabels[currentPosition]), 0,4);
         grid.add(doneBtn, 0, 5);
         grid.add(editEventBtn, 0, 6);

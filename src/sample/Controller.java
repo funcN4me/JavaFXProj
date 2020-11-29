@@ -5,6 +5,10 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -12,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import javax.sound.midi.SysexMessage;
 
@@ -36,6 +41,18 @@ public class Controller {
 
     @FXML
     private VBox VBoxChanges;
+
+    @FXML
+    private Label editEventModeLabel;
+
+    @FXML
+    private Label addEventModeLabel;
+
+    @FXML
+    private Label setDurationLabel;
+
+    @FXML
+    private Label setStartTimeLabel;
 
     @FXML
     private URL location;
@@ -66,13 +83,111 @@ public class Controller {
     @FXML
     void addEventAction(ActionEvent event) {
         String[] timeForDB = {changeHours.getText(), changeMinutes.getText(), changeSeconds.getText()};
-        DBFuncs.addEvent(changeName.getText(), ParsingData.convertDateFor(changeDatePicker.getEditor().getText(),"For DB") , ParsingData.parseTime(timeForDB),
-                Integer.toString(Integer.parseInt(changeStartHours.getText()) * 60 + Integer.parseInt(changeStartMinutes.getText())), changePlace.getText());
+        boolean check = true;
+        if (!addActionDefender(changeName.getText())) {
+            check = false;
+            changeName.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeDatePicker.getEditor().getText())) {
+            check = false;
+            changeDatePicker.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeHours.getText())) {
+            check = false;
+            changeHours.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeMinutes.getText())) {
+            check = false;
+            changeMinutes.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeSeconds.getText())) {
+            check = false;
+            changeSeconds.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeStartHours.getText())) {
+            check = false;
+            changeStartHours.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changeStartMinutes.getText())) {
+            check = false;
+            changeStartMinutes.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (!addActionDefender(changePlace.getText())) {
+            check = false;
+            changePlace.setStyle("-fx-border-color:  #cf044b");
+        }
+        if (check) {
+            changePlace.setStyle("");
+            changeStartMinutes.setStyle("");
+            changeStartHours.setStyle("");
+            changeSeconds.setStyle("");
+            changeMinutes.setStyle("");
+            changeHours.setStyle("");
+            changeDatePicker.setStyle("");
+            changeName.setStyle("");
+            DBFuncs.addEvent(changeName.getText(), ParsingData.convertDateFor(changeDatePicker.getEditor().getText(),"For DB"), ParsingData.parseTime(timeForDB),
+                    Integer.toString(Integer.parseInt(changeStartHours.getText()) * 60 + Integer.parseInt(changeStartMinutes.getText())), changePlace.getText());
+        }
 
+    }
+
+    public static boolean addActionDefender(String nameField) {
+        if (nameField.length() != 0)
+            return true;
+        return false;
     }
 
     @FXML
     private Button addEvent;
+
+    @FXML
+    private ColorPicker colorPicker;
+
+    @FXML
+    private Label secretModeLabel;
+
+    @FXML
+    private Label secretModeSecondLabel;
+
+    @FXML
+    private Button applyColorForWindowBtn;
+
+    @FXML
+    private Button applyColorForTextBtn;
+
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Button resetColorBtn;
+
+    @FXML
+    void applyColorForText(ActionEvent event) {
+        System.out.println(colorPicker.getValue().toString());
+        phraseOfDayLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+        welcomeLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+        setDurationLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+        setStartTimeLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+        editEventModeLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+        addEventModeLabel.setStyle("-fx-text-fill: #" + colorPicker.getValue().toString().replace("0x", ""));
+    }
+
+    @FXML
+    void applyColorForWindow(ActionEvent event) {
+        tabPane.setStyle("-fx-background-color: #" + colorPicker.getValue().toString().replace("0x", ""));
+    }
+
+    @FXML
+    void resetBtn(ActionEvent event) {
+        tabPane.setStyle("");
+        phraseOfDayLabel.setStyle("");
+        welcomeLabel.setStyle("");
+        setDurationLabel.setStyle("");
+        setStartTimeLabel.setStyle("");
+        editEventModeLabel.setStyle("");
+        addEventModeLabel.setStyle("");
+    }
+
 
     @FXML
     private TextField changeSeconds;
@@ -99,16 +214,11 @@ public class Controller {
     }
 
 
-
-    @FXML
-    void changeDate(ActionEvent event) {
-
-    }
     @FXML
     void increaseStartHours(ScrollEvent event) {
-        int hour = Integer.parseInt(changeStartHours.getText());
+        String hours = scrollDefender(changeStartHours.getText());
+        int hour = Integer.parseInt(hours);
 
-        System.out.println(changeStartHours.getText());
         if (event.getDeltaY() >= 0) {
             changeStartHours.setText(Integer.toString(++hour));
         }
@@ -120,9 +230,9 @@ public class Controller {
 
     @FXML
     void increaseStartMinutes(ScrollEvent event) {
-        int minute = Integer.parseInt(changeStartMinutes.getText());
+        String minutes = scrollDefender(changeStartMinutes.getText());
+        int minute = Integer.parseInt(minutes);
 
-        System.out.println(changeStartMinutes.getText());
         if (event.getDeltaY() >= 0) {
             changeStartMinutes.setText(Integer.toString(++minute));
         }
@@ -133,9 +243,9 @@ public class Controller {
 
     @FXML
     void increaseHours(ScrollEvent event) {
-        int hour = Integer.parseInt(changeHours.getText());
+        String hours = scrollDefender(changeHours.getText());
+        int hour = Integer.parseInt(hours);
 
-        System.out.println(changeHours.getText());
         if (event.getDeltaY() >= 0) {
             changeHours.setText(Integer.toString(++hour));
         }
@@ -147,9 +257,9 @@ public class Controller {
 
     @FXML
     void increaseMinutes(ScrollEvent event) {
-        int minute = Integer.parseInt(changeMinutes.getText());
+        String minutes = scrollDefender(changeMinutes.getText());
+        int minute = Integer.parseInt(minutes);
 
-        System.out.println(changeMinutes.getText());
         if (event.getDeltaY() >= 0) {
             changeMinutes.setText(Integer.toString(++minute));
         }
@@ -160,9 +270,9 @@ public class Controller {
 
     @FXML
     void increaseSeconds(ScrollEvent event) {
-        int second = Integer.parseInt(changeSeconds.getText());
+        String seconds = scrollDefender(changeSeconds.getText());
+        int second = Integer.parseInt(seconds);
 
-        System.out.println(changeSeconds.getText());
         if (event.getDeltaY() >= 0) {
             changeSeconds.setText(Integer.toString(++second));
         }
@@ -175,8 +285,17 @@ public class Controller {
     @FXML
     void Goodbye(MouseEvent event) {
         MouseButton mouseButton = event.getButton();
-        System.out.println(mouseButton);
+        int clicks = event.getClickCount();
+        boolean status = colorPicker.isVisible();
+        if (clicks == 5) {
+            colorPicker.setVisible(!status);
+            secretModeLabel.setVisible(!status);
+            secretModeSecondLabel.setVisible(!status);
+            applyColorForTextBtn.setVisible(!status);
+            applyColorForWindowBtn.setVisible(!status);
+            resetColorBtn.setVisible(!status);
 
+        }
     }
 
 
@@ -251,8 +370,11 @@ public class Controller {
                     addEvent.setVisible(true);
                     confirmChangesBtn.setVisible(false);
                     statusSlider.setDisable(true);
-                    VBoxChanges.setStyle("-fx-border-color: #29b3cc; -fx-border-width:  8px");
-                };
+                    VBoxChanges.setStyle("-fx-border-color: linear-gradient(to bottom right, #00a159, #804b15, #393481); -fx-border-width:  6px");
+                }
+                if (statusSlider.getValue() == 0) {
+                    VBoxChanges.setStyle("-fx-border-color:  linear-gradient(to top left, #772a9d, #0561a1, #690831); -fx-border-width:  6px");
+                }
             }
         });
     }
@@ -371,6 +493,16 @@ public class Controller {
         changeMinutes.setText(parsedStartTime[1]);
         changeSeconds.setText(parsedStartTime[2]);
         changePlace.setText(placeOfEvent);
+    }
+
+    public String scrollDefender(String field) {
+        StringBuilder output = new StringBuilder();
+        if (field.length() == 0) {
+            output.append("00");
+        }
+        else
+            return field;
+        return output.toString();
     }
 
 }

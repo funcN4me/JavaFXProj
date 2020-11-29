@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -18,21 +19,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="1047.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <TabPane prefHeight="574.0" prefWidth="811.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" prefHeight="593.0" prefWidth="1047.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Welcome">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#Goodbye" prefHeight="360.0" prefWidth="811.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" onMouseClicked="#Goodbye" prefHeight="540.0" prefWidth="1047.0">
                      <children>
-                        <Label fx:id="welcomeLabel" layoutX="215.0" text="Welcome to your diary, honey">
+                        <Label fx:id="welcomeLabel" layoutX="351.0" text="Welcome to your diary, honey">
                            <font>
                               <Font name="Comic Sans MS Bold Italic" size="26.0" />
                            </font>
                         </Label>
-                        <ComboBox fx:id="activitiesComboBox" layoutX="14.0" layoutY="88.0" onAction="#rebuildAccordion" prefHeight="25.0" prefWidth="201.0" promptText="Your upcoming event" />
-                        <HBox alignment="TOP_CENTER" layoutX="1.0" layoutY="37.0" prefHeight="51.0" prefWidth="811.0">
+                        <ComboBox fx:id="activitiesComboBox" layoutX="14.0" layoutY="88.0" onAction="#rebuildAccordion" prefHeight="25.0" prefWidth="257.0" promptText="Your upcoming event" />
+                        <HBox alignment="TOP_CENTER" layoutX="1.0" layoutY="37.0" prefHeight="51.0" prefWidth="1047.0">
                            <children>
                               <Label fx:id="phraseOfDayLabel" text="Phrase of a day: " textAlignment="JUSTIFY">
                                  <font>
@@ -41,74 +42,139 @@
                               </Label>
                            </children>
                         </HBox>
-                        <ScrollPane fx:id="scrollPaneForAccordion" hbarPolicy="NEVER" layoutX="15.0" layoutY="160.0" prefHeight="303.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                        <ScrollPane fx:id="scrollPaneForAccordion" hbarPolicy="NEVER" layoutX="15.0" layoutY="160.0" prefHeight="359.0" prefWidth="257.0" vbarPolicy="ALWAYS">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="298.0" prefWidth="188.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="356.0" prefWidth="243.0">
                                  <children>
-                                    <Accordion fx:id="activitiesAccordion" layoutY="-1.0" prefHeight="298.0" prefWidth="185.0" />
+                                    <Accordion fx:id="activitiesAccordion" layoutY="-1.0" prefHeight="359.0" prefWidth="241.0" />
                                  </children>
                               </AnchorPane>
                           </content>
                         </ScrollPane>
-                        <DatePicker fx:id="datePicker" editable="false" layoutX="15.0" layoutY="121.0" onAction="#rebuildAccordionWithDatePicker" prefHeight="27.0" prefWidth="201.0" />
-                        <VBox fx:id="VBoxChanges" alignment="TOP_CENTER" layoutX="430.0" layoutY="160.0" prefHeight="298.0" prefWidth="197.0" spacing="15.0" style="-fx-border-color: #5c676e; -fx-border-width: 8px;">
+                        <DatePicker fx:id="datePicker" editable="false" layoutX="15.0" layoutY="121.0" onAction="#rebuildAccordionWithDatePicker" prefHeight="27.0" prefWidth="257.0" />
+                        <VBox fx:id="VBoxChanges" alignment="TOP_CENTER" layoutX="746.0" layoutY="151.0" prefHeight="367.0" prefWidth="287.0" spacing="15.0" style="-fx-border-color: linear-gradient(to bottom right, #00a159, #804b15, #393481); -fx-border-width: 6px;">
                            <children>
-                              <TextField fx:id="changeName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" promptText="Enter new name" />
-                              <DatePicker fx:id="changeDatePicker" onAction="#changeDate" promptText="Select new date" />
-                              <HBox prefHeight="47.0" prefWidth="197.0">
+                              <TextField fx:id="changeName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="212.0" promptText="Set event name" />
+                              <DatePicker fx:id="changeDatePicker" editable="false" prefHeight="25.0" prefWidth="212.0" promptText="Select event date" />
+                              <VBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="188.0">
                                  <children>
-                                    <TextField fx:id="changeHours" onScroll="#increaseHours" prefHeight="25.0" prefWidth="34.0">
-                                       <HBox.margin>
-                                          <Insets right="35.0" top="10.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                    <TextField fx:id="changeMinutes" onScroll="#increaseMinutes" prefHeight="25.0" prefWidth="34.0">
-                                       <HBox.margin>
-                                          <Insets right="35.0" top="10.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                    <TextField fx:id="changeSeconds" onScroll="#increaseSeconds" prefHeight="25.0" prefWidth="34.0">
-                                       <HBox.margin>
-                                          <Insets right="15.0" top="10.0" />
-                                       </HBox.margin>
-                                    </TextField>
+                                    <Label fx:id="setStartTimeLabel" text="Set start time of event">
+                                       <font>
+                                          <Font name="Comic Sans MS Bold Italic" size="16.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets right="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox prefHeight="10.0" prefWidth="188.0">
+                                       <children>
+                                          <Label text="Hours">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="8.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="changeHours" alignment="CENTER" onScroll="#increaseHours" prefHeight="25.0" prefWidth="37.0" promptText="HH">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                          <Label text="Minutes">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="8.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="changeMinutes" alignment="CENTER" onScroll="#increaseMinutes" prefHeight="25.0" prefWidth="37.0" promptText="MM">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                          <Label text="Seconds">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="8.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="changeSeconds" alignment="CENTER" onScroll="#increaseSeconds" prefHeight="25.0" prefWidth="34.0" promptText="SS">
+                                             <HBox.margin>
+                                                <Insets top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                       <padding>
+                                          <Insets left="12.0" />
+                                       </padding>
+                                    </HBox>
                                  </children>
-                                 <padding>
-                                    <Insets left="12.0" />
-                                 </padding>
-                              </HBox>
-                              <HBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="197.0">
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" prefHeight="58.0" prefWidth="216.0">
                                  <children>
-                                    <TextField fx:id="changeStartHours" onScroll="#increaseStartHours" prefHeight="25.0" prefWidth="45.0">
-                                       <HBox.margin>
-                                          <Insets left="35.0" right="35.0" top="10.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                    <TextField fx:id="changeStartMinutes" onScroll="#increaseStartMinutes" prefHeight="25.0" prefWidth="44.0">
-                                       <HBox.margin>
-                                          <Insets left="8.0" right="35.0" top="10.0" />
-                                       </HBox.margin>
-                                    </TextField>
+                                    <Label fx:id="setDurationLabel" text="Set duration of event">
+                                       <font>
+                                          <Font name="Comic Sans MS Bold Italic" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="TOP_CENTER" prefHeight="47.0" prefWidth="197.0">
+                                       <children>
+                                          <Label text="Hours">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="8.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="changeStartHours" alignment="CENTER" onScroll="#increaseStartHours" prefHeight="25.0" prefWidth="37.0" promptText="HH">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                          <Label text="Minutes">
+                                             <HBox.margin>
+                                                <Insets right="5.0" top="8.0" />
+                                             </HBox.margin>
+                                          </Label>
+                                          <TextField fx:id="changeStartMinutes" alignment="CENTER" onScroll="#increaseStartMinutes" prefHeight="25.0" prefWidth="37.0" promptText="MM">
+                                             <HBox.margin>
+                                                <Insets top="5.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                       </children>
+                                       <padding>
+                                          <Insets left="12.0" />
+                                       </padding>
+                                    </HBox>
                                  </children>
-                                 <padding>
-                                    <Insets left="12.0" />
-                                 </padding>
-                              </HBox>
-                              <TextField fx:id="changePlace" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" promptText="Enter new place" />
-                              <HBox prefHeight="35.0" prefWidth="181.0">
+                              </VBox>
+                              <TextField fx:id="changePlace" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="212.0" promptText="Where it will be" />
+                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Button fx:id="confirmChangesBtn" mnemonicParsing="false" onAction="#confirmChanges" prefHeight="42.0" prefWidth="98.0" text="Confirm" visible="false" />
-                                    <Button fx:id="addEvent" mnemonicParsing="false" onAction="#addEventAction" prefHeight="32.0" prefWidth="87.0" text="Add event" />
+                                    <Button fx:id="confirmChangesBtn" mnemonicParsing="false" onAction="#confirmChanges" prefHeight="35.0" prefWidth="98.0" text="Confirm" visible="false" />
+                                    <Button fx:id="addEvent" mnemonicParsing="false" onAction="#addEventAction" prefHeight="35.0" prefWidth="98.0" text="Add event" />
                                  </children>
-                              </HBox>
+                              </VBox>
                            </children>
                            <padding>
                               <Insets top="10.0" />
                            </padding>
                         </VBox>
-                        <Slider fx:id="statusSlider" blockIncrement="1.0" disable="true" layoutX="459.0" layoutY="135.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" onMouseDragEntered="#Dada" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
-                        <Label layoutX="433.0" layoutY="113.0" text="Edit event" />
-                        <Label layoutX="559.0" layoutY="113.0" text="Add new event" />
+                        <Slider fx:id="statusSlider" blockIncrement="1.0" disable="true" layoutX="787.0" layoutY="126.0" majorTickUnit="1.0" max="1.0" minorTickCount="0" onMouseDragEntered="#Dada" prefHeight="11.0" prefWidth="204.0" snapToTicks="true" value="1.0" />
+                        <Label fx:id="editEventModeLabel" layoutX="729.0" layoutY="101.0" text="Edit event mode">
+                           <font>
+                              <Font name="Comic Sans MS Bold Italic" size="16.0" />
+                           </font></Label>
+                        <Label fx:id="addEventModeLabel" layoutX="903.0" layoutY="101.0" text="Add event mode">
+                           <font>
+                              <Font name="Comic Sans MS Bold Italic" size="16.0" />
+                           </font></Label>
+                        <ColorPicker fx:id="colorPicker" layoutX="455.0" layoutY="199.0" promptText="Choose color" visible="false" />
+                        <Label fx:id="secretModeLabel" layoutX="362.0" layoutY="140.0" prefHeight="25.0" prefWidth="290.0" style="-fx-text-fill: linear-gradient(to bottom right, #ff7f50, #6a5acd);" text="Welcome to secret editor mode" visible="false">
+                           <font>
+                              <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="secretModeSecondLabel" layoutX="319.0" layoutY="163.0" style="-fx-text-fill: linear-gradient(to bottom right, #ff7f50, #6a5acd);" text="To disable it click 5 times on any free space" visible="false">
+                           <font>
+                              <Font name="Comic Sans MS Bold Italic" size="18.0" />
+                           </font></Label>
+                        <Button fx:id="applyColorForWindowBtn" layoutX="400.0" layoutY="251.0" mnemonicParsing="false" onAction="#applyColorForWindow" text="Apply for window" visible="false" />
+                        <Button fx:id="applyColorForTextBtn" layoutX="525.0" layoutY="251.0" mnemonicParsing="false" onAction="#applyColorForText" prefHeight="25.0" prefWidth="110.0" text="Apply for text" visible="false" />
+                        <Button fx:id="resetColorBtn" layoutX="476.0" layoutY="295.0" mnemonicParsing="false" onAction="#resetBtn" prefHeight="25.0" prefWidth="84.0" text="Reset" visible="false" />
                      </children>
                   </AnchorPane>
             </content>
@@ -120,12 +186,12 @@
           </Tab>
         </tabs>
       </TabPane>
-      <SplitPane dividerPositions="0.09090909090909091" layoutY="574.0" orientation="VERTICAL" prefHeight="35.0" prefWidth="811.0">
+      <SplitPane dividerPositions="0.0967741935483871" layoutY="590.0" orientation="VERTICAL" prefHeight="39.0" prefWidth="1047.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="39.0" prefWidth="1047.0">
                <children>
-                  <HBox alignment="BOTTOM_LEFT" layoutX="450.0" layoutY="-6.0" prefHeight="35.0" prefWidth="361.0">
+                  <HBox alignment="BOTTOM_LEFT" layoutX="636.0" layoutY="-3.0" prefHeight="35.0" prefWidth="365.0">
                      <children>
                         <Label fx:id="currentTimeLabel" alignment="TOP_CENTER" text="Current time: ">
                            <font>
