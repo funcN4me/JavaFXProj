@@ -69,6 +69,19 @@ public class DBFuncs {
         return result.toString();
     }
 
+
+
+    public static boolean CheckIntersected(String dateOfEvent){
+
+        String query = "SELECT * FROM diary.activities WHERE Date = \"" + dateOfEvent + "\" or Date >= DATE_ADD(\"" + dateOfEvent + "\", INTERVAL 1 DAY);";
+
+        /* SELECT * FROM diary.activities WHERE (Date = "2020-11-30" or Date = DATE_ADD("2020-11-30", INTERVAL 1 DAY))
+and addtime(StartsAt, "00:15:00") <= "01:10:00";*/
+
+//        SELECT * FROM diary.activities WHERE Date >= DATE_ADD(\"" + dateOfEvent + "\", INTERVAL 1 DAY);
+    return false;
+    }
+
     public static void deletePastEvents() {
         String currentTime = ParsingData.getCurrentTime();
         String query = "DELETE FROM diary.activities WHERE Date < \"" + currentDate + "\" or (Date = \"" +
@@ -87,27 +100,15 @@ public class DBFuncs {
     public static void changeEvent(String nameOfEvent, String dateOfEvent, String startTimeOfEvent, String durationOfEvent, String placeOfEvent,
                                    String newNameOfEvent, String newDateOfEvent, String newStartTimeOfEvent, String newDurationOfEvent, String newPlaceOfEvent) {
 
-        String queryForMaxId = "SELECT MAX(id_activity) FROM diary.activities";
-        StringBuilder result = new StringBuilder();
-        ResultSet rs = executeSelectQuery(queryForMaxId);
-        try {
-            while (rs.next())
-                result.append(rs.getString("MAX(id_activity)"));
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        String query = "UPDATE diary.activities SET id_activity = " + Integer.parseInt(result.toString()) + ", Date = \""
+        String query = "UPDATE diary.activities SET " + "Date = \""
                 + newDateOfEvent + "\", Name = \"" + newNameOfEvent + "\", StartsAt = \"" + newStartTimeOfEvent + "\", Duration = "
                 + newDurationOfEvent + ", Place = \"" + newPlaceOfEvent + "\" WHERE Date = \"" + dateOfEvent + "\" and StartsAt = \"" + startTimeOfEvent +
                 "\" and Duration = " + durationOfEvent + " and Place = \"" + placeOfEvent + "\";";
-        System.out.println(query);
         executeDUIQuery(query);
     }
 
 
     public static void addEvent(String nameEvent, String dateOfEvent, String startTimeOfEvent, String durationOfEvent, String placeOfEvent) {
-
 
         String queryForMaxId = "SELECT MAX(id_activity) FROM diary.activities";
         StringBuilder result = new StringBuilder();
@@ -121,7 +122,7 @@ public class DBFuncs {
         }
         String query = "INSERT INTO diary.activities VALUES (" + (Integer.parseInt(result.toString()) + 1) + ", \""
                 + nameEvent +"\", \"" + dateOfEvent + "\", \"" + startTimeOfEvent + "\", "
-                + durationOfEvent + ", \"" + placeOfEvent + "\"" + ");";
+                + durationOfEvent + ", \"" + placeOfEvent + "\"" + ", 0);";
         System.out.println(query);
         executeDUIQuery(query);
     }
@@ -161,4 +162,5 @@ public class DBFuncs {
             sqlEx.printStackTrace();
         }
     }
+
 }

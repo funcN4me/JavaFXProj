@@ -4,11 +4,6 @@ package sample;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,9 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
-
-import javax.sound.midi.SysexMessage;
 
 public class Controller {
     @FXML
@@ -74,58 +66,59 @@ public class Controller {
     @FXML
     private Slider statusSlider;
 
+    private boolean switchColorTextBox(){
+        boolean statusError = true;
+
+        boolean[] textBoxStatusError = {addActionDefender(changeName.getText()), addActionDefender(changeDatePicker.getEditor().getText()),
+                addActionDefender(changeHours.getText()), addActionDefender(changeMinutes.getText()), addActionDefender(changeSeconds.getText()),
+                addActionDefender(changeStartHours.getText()), addActionDefender(changeStartMinutes.getText()), addActionDefender(changePlace.getText())};
+
+        for (int i = 0; i < textBoxStatusError.length; i++)
+        {
+            if (!textBoxStatusError[i])
+            {
+                statusError = false;
+                switch (i)
+                {
+                    case 0 -> changeName.setStyle("-fx-border-color:  #cf044b");
+                    case 1 -> changeDatePicker.setStyle("-fx-border-color:  #cf044b");
+                    case 2 -> changeHours.setStyle("-fx-border-color:  #cf044b");
+                    case 3 -> changeMinutes.setStyle("-fx-border-color:  #cf044b");
+                    case 4 -> changeSeconds.setStyle("-fx-border-color:  #cf044b");
+                    case 5 -> changeStartHours.setStyle("-fx-border-color:  #cf044b");
+                    case 6 -> changeStartMinutes.setStyle("-fx-border-color:  #cf044b");
+                    case 7 -> changePlace.setStyle("-fx-border-color:  #cf044b");
+                }
+            }
+            else
+            {
+                switch (i)
+                {
+                    case 0 -> changeName.setStyle("");
+                    case 1 -> changeDatePicker.setStyle("");
+                    case 2 -> changeHours.setStyle("");
+                    case 3 -> changeMinutes.setStyle("");
+                    case 4 -> changeSeconds.setStyle("");
+                    case 5 -> changeStartHours.setStyle("");
+                    case 6 -> changeStartMinutes.setStyle("");
+                    case 7 -> changePlace.setStyle("");
+                }
+            }
+        }
+        return statusError;
+
+    }
+
     @FXML
     private TextField changeHours;
 
     @FXML
     private TextField changeMinutes;
-
     @FXML
     void addEventAction(ActionEvent event) {
         String[] timeForDB = {changeHours.getText(), changeMinutes.getText(), changeSeconds.getText()};
-        boolean check = true;
-        if (!addActionDefender(changeName.getText())) {
-            check = false;
-            changeName.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeDatePicker.getEditor().getText())) {
-            check = false;
-            changeDatePicker.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeHours.getText())) {
-            check = false;
-            changeHours.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeMinutes.getText())) {
-            check = false;
-            changeMinutes.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeSeconds.getText())) {
-            check = false;
-            changeSeconds.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeStartHours.getText())) {
-            check = false;
-            changeStartHours.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changeStartMinutes.getText())) {
-            check = false;
-            changeStartMinutes.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (!addActionDefender(changePlace.getText())) {
-            check = false;
-            changePlace.setStyle("-fx-border-color:  #cf044b");
-        }
-        if (check) {
-            changePlace.setStyle("");
-            changeStartMinutes.setStyle("");
-            changeStartHours.setStyle("");
-            changeSeconds.setStyle("");
-            changeMinutes.setStyle("");
-            changeHours.setStyle("");
-            changeDatePicker.setStyle("");
-            changeName.setStyle("");
-            DBFuncs.addEvent(changeName.getText(), ParsingData.convertDateFor(changeDatePicker.getEditor().getText(),"For DB"), ParsingData.parseTime(timeForDB),
+        if (switchColorTextBox()) {
+            DBFuncs.addEvent(changeName.getText(), ParsingData.convertDateFor(changeDatePicker.getEditor().getText(), "For DB"), ParsingData.parseTime(timeForDB),
                     Integer.toString(Integer.parseInt(changeStartHours.getText()) * 60 + Integer.parseInt(changeStartMinutes.getText())), changePlace.getText());
         }
 
@@ -188,6 +181,8 @@ public class Controller {
         addEventModeLabel.setStyle("");
     }
 
+    @FXML
+    private CheckBox intersectibleCheckBox;
 
     @FXML
     private TextField changeSeconds;
@@ -207,12 +202,11 @@ public class Controller {
     @FXML
     void confirmChanges(ActionEvent event) {
 
-        System.out.println(Arrays.toString(oldData));
         String[] timeForDB = {changeHours.getText(), changeMinutes.getText(), changeSeconds.getText()};
+        if (switchColorTextBox())
         DBFuncs.changeEvent(oldData[0], oldData[1], oldData[2], oldData[3], oldData[4], changeName.getText(),
                 ParsingData.convertDateFor(changeDatePicker.getEditor().getText(),"For DB") , ParsingData.parseTime(timeForDB), Integer.toString(Integer.parseInt(changeStartHours.getText()) * 60 + Integer.parseInt(changeStartMinutes.getText())), changePlace.getText());
     }
-
 
     @FXML
     void increaseStartHours(ScrollEvent event) {
