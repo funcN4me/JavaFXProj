@@ -341,6 +341,8 @@ public class Controller {
         changesDefender();
         sliderMode();
 //        System.out.println(SetUpComponents.setUpEditEventBtn());
+        DBFuncs.checkIntersected("2020-12-01", "11:50:00" ,"20");
+//        DBFuncs.jopaVGovne();
 
     }
 

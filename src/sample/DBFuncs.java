@@ -1,5 +1,6 @@
 package sample;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -70,16 +71,90 @@ public class DBFuncs {
     }
 
 
+    public static int parsingTimeDuration(String StartsAt)
+    {
+        int result;
 
-    public static boolean CheckIntersected(String dateOfEvent){
+        result = Integer.parseInt(StartsAt.split(":")[0]) * 60 + Integer.parseInt(StartsAt.split(":")[1]);
 
-        String query = "SELECT * FROM diary.activities WHERE Date = \"" + dateOfEvent + "\" or Date >= DATE_ADD(\"" + dateOfEvent + "\", INTERVAL 1 DAY);";
+
+        return result;
+    }
+
+//    public static void jopaVGovne() {
+//        String queryTwo = "SELECT * FROM diary.activities WHERE Date = DATE_ADD(\" 2020-12-01 \", INTERVAL 1 DAY);";
+//        ResultSet rs = executeSelectQuery(queryTwo);
+//        try {
+//            System.out.print(rs.first());
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//
+//    }
+
+    public static void checkIntersected(String dateOfEvent, String startOfEvent, String durationOfEvent){
+
+        String queryOne = "SELECT * FROM diary.activities WHERE Date = \"" + dateOfEvent + "\";";
+        String queryTwo = "SELECT * FROM diary.activities WHERE Date = DATE_ADD(\"" + dateOfEvent + "\", INTERVAL 1 DAY);";
+// не рассматривает дела из предыдущего дня, которые накладываются на день назначения эвента, продублировать все что происходит со следующим днем на предыдущий
+// найти функцию обратную DATE_ADD, занести всё в единую функцию
+//        StringBuilder resultStartsAt = new StringBuilder();
+//        StringBuilder resultDuration = new StringBuilder();
+        StringBuilder idIntersectedEvent = new StringBuilder();
+
+        int eventStart = Integer.parseInt(startOfEvent.split(":")[0]) * 60 + Integer.parseInt(startOfEvent.split(":")[1]);
+        int eventStop = eventStart + Integer.parseInt(durationOfEvent);
+
+        ResultSet rsOne = executeSelectQuery(queryOne);
+        ResultSet rsTwo = executeSelectQuery(queryTwo);
+
+        Integer nextEventStart;
+        Integer nextEventStop;
+
+        try {
+            while (rsOne.next()) {
+
+//                String a = rsOne.getString("StartsAt");
+//                String b = rsOne.getString("StartsAt");
+
+                nextEventStart = Integer.parseInt(rsOne.getString("StartsAt").split(":")[0]) * 60
+                        + Integer.parseInt(rsOne.getString("StartsAt").split(":")[1]);
+                nextEventStop = nextEventStart + Integer.parseInt(rsOne.getString("Duration"));
+
+                if ((eventStart < nextEventStart && nextEventStart < eventStop) || (nextEventStop < eventStart && nextEventStop < eventStop) &&
+                        rsOne.getString("Intersected").equals("0"))
+                {
+                    idIntersectedEvent.append(rsOne.getString("id_activity")).append(" ");
+                }
+
+                if (rsTwo.first()) {
+                    nextEventStart = Integer.parseInt(rsTwo.getString("StartsAt").split(":")[0]) * 60 + Integer.parseInt(rsTwo.getString("StartsAt").split(":")[0]) + 24 * 60;
+                    nextEventStop = nextEventStart + Integer.parseInt(rsTwo.getString("Duration")) + 24 * 60;
+
+                    if ((eventStart < nextEventStart && nextEventStart < eventStop) || (nextEventStop < eventStart && nextEventStop < eventStop) &&
+                            rsTwo.getString("Intersected").equals("0")) {
+                        idIntersectedEvent.append(rsTwo.getString("id_activity")).append(" ");
+                    }
+                }
+//                resultStartsAt.append(rsTwo.getString("StartsAt")).append(" ");
+//                // 12:00:00, 13:00:00, 14:00:00
+//                resultDuration.append(rsTwo.getString("Duration")).append(" ");
+//                // 16, 26, 91
+
+
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        System.out.print(Arrays.toString(idIntersectedEvent.toString().split(" ")));
 
         /* SELECT * FROM diary.activities WHERE (Date = "2020-11-30" or Date = DATE_ADD("2020-11-30", INTERVAL 1 DAY))
 and addtime(StartsAt, "00:15:00") <= "01:10:00";*/
 
 //        SELECT * FROM diary.activities WHERE Date >= DATE_ADD(\"" + dateOfEvent + "\", INTERVAL 1 DAY);
-    return false;
+//    return false;
     }
 
     public static void deletePastEvents() {
