@@ -9,7 +9,7 @@ public class DBFuncs {
     // JDBC URL, username and password of MySQL server
     private static final String url = "jdbc:mysql://127.0.0.1:3306/departmentHR?autoReconnect=true&useSSL=false";
     private static final String user = "root";
-    private static final String password = "JustWinners122";
+    private static final String password = "****";
 
     // JDBC variables for opening and managing connection
     private static Connection con;
